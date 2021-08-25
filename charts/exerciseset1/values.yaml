@@ -7,14 +7,14 @@ kubeteach:
     pullPolicy: Always
     # tag: ""
 
-  imagePullSecrets: [ ]
+  imagePullSecrets: []
   nameOverride: ""
 
   serviceAccount:
     name: kubeteach-sa
-    annotations: { }
+    annotations: {}
 
-  podAnnotations: { }
+  podAnnotations: {}
 
   securityContext:
     capabilities:
@@ -31,8 +31,8 @@ kubeteach:
       cpu: 50m
       memory: 64Mi
 
-  nodeSelector: { }
+  nodeSelector: {}
 
-  tolerations: [ ]
+  tolerations: []
 
-  affinity: { }
+  affinity: {}
