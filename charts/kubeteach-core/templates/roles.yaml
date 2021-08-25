@@ -1,0 +1,142 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "kubeteach.name" . }}-leader-election-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "kubeteach.name" . }}-manager-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - exercisesets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - exercisesets/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - exercisesets/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - taskdefinitions
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - taskdefinitions/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - tasks
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - kubeteach.geberl.io
+    resources:
+      - tasks/status
+    verbs:
+      - get
+      - patch
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "kubeteach.name" . }}-leader-election-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "kubeteach.name" . }}-leader-election-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kubeteach.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "kubeteach.name" . }}-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "kubeteach.name" . }}-manager-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kubeteach.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
