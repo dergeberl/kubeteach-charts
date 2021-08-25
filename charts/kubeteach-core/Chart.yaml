@@ -1,6 +1,9 @@
 apiVersion: v2
 name: kubeteach-core
 description: learn kubernetes in kuberenetes
+maintainers:
+  - name: dergeberl
+    url: https://github.com/dergeberl
 type: application
 version: 0.1.0
 appVersion: "v0.1.3-alpha"
