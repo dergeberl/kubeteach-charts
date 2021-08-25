@@ -1,4 +1,8 @@
 target-branch: main
-helm-extra-args: --timeout 600s
+helm-extra-args: --timeout 60s
 chart-dirs:
   - charts
+chart-repos:
+  - kubeteach=https://dergeberl.github.io/kubeteach-charts
+excluded-charts:
+  - exerciseset1
