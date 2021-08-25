@@ -4,3 +4,5 @@ chart-dirs:
   - charts
 chart-repos:
   - kubeteach=https://dergeberl.github.io/kubeteach-charts
+excluded-charts:
+  - exerciseset1
