@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/dergeberl/kubeteach
   pullPolicy: Always
-  #tag: ""
+  # tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -14,19 +14,19 @@ serviceAccount:
 podAnnotations: {}
 
 securityContext:
-   capabilities:
-     drop:
-     - ALL
-   readOnlyRootFilesystem: true
-   runAsNonRoot: true
+ capabilities:
+   drop:
+   - ALL
+ readOnlyRootFilesystem: true
+ runAsNonRoot: true
 
 resources:
-   limits:
-     cpu: 100m
-     memory: 128Mi
-   requests:
-     cpu: 50m
-     memory: 64Mi
+ limits:
+   cpu: 100m
+   memory: 128Mi
+ requests:
+   cpu: 50m
+   memory: 64Mi
 
 nodeSelector: {}
 
