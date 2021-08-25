@@ -14,24 +14,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Fetch history
-        run: git fetch --prune --unshallow
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: setup chart tester
+        uses: helm/chart-testing-action@v2.1.0
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed)
+          if [[ -n "$changed" ]]; then
+            echo "::set-output name=changed::true"
+          fi
 
       - name: Run chart-testing (lint)
-        id: lint
-        uses: helm/chart-testing-action@v2.1.0
+        run: ct lint
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.2.0
         with:
           version: v0.11.1
-        if: steps.lint.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@v2.1.0
-        with:
-          command: install
-          config: .github/ct.yaml
+        run: ct install
 #  helm-docs:
 #    runs-on: ubuntu-latest
 #    steps:
