@@ -47,13 +47,3 @@ jobs:
 
       - name: Run chart-testing (install)
         run: ct install --config .github/ct.yaml
-#  helm-docs:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: run helm-docs
-#        run: docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
-#      # Use the output from the `hello` step
-#      - name: Get the output time
-#        run: git diff --exit-code || (echo "please update helm-docs" && exit 1)
