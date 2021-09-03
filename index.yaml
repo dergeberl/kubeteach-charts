@@ -29,6 +29,24 @@ entries:
     version: 0.1.0
   kubeteach-exerciseset1:
   - apiVersion: v2
+    appVersion: v0.1.4-alpha
+    created: "2021-09-03T15:13:06.776416206Z"
+    dependencies:
+    - alias: kubeteach
+      name: kubeteach-core
+      repository: https://dergeberl.github.io/kubeteach-charts
+      version: 0.1.1
+    description: learn kubernetes in kuberenetes
+    digest: 53215056cc30d421ede86a101b3c95c6983c3e8b154123b57e69f9856fd122f2
+    maintainers:
+    - name: dergeberl
+      url: https://github.com/dergeberl
+    name: kubeteach-exerciseset1
+    type: application
+    urls:
+    - https://github.com/dergeberl/kubeteach-charts/releases/download/kubeteach-exerciseset1-0.1.1/kubeteach-exerciseset1-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: v0.1.3-alpha
     created: "2021-08-25T20:11:17.26996316Z"
     dependencies:
@@ -46,4 +64,4 @@ entries:
     urls:
     - https://github.com/dergeberl/kubeteach-charts/releases/download/kubeteach-exerciseset1-0.1.0/kubeteach-exerciseset1-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-03T15:09:44.466084202Z"
+generated: "2021-09-03T15:13:06.776427707Z"
