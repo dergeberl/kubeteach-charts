@@ -5,6 +5,11 @@ image:
   pullPolicy: Always
   # tag: ""
 
+service:
+  enabled: false
+  type: ClusterIP
+  port: 8080
+
 imagePullSecrets: []
 nameOverride: ""
 
