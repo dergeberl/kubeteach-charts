@@ -1,9 +1,35 @@
 replicaCount: 1
 
-image:
-  repository: ghcr.io/dergeberl/kubeteach
-  pullPolicy: Always
-  # tag: ""
+images:
+  kubeteach:
+    repository: ghcr.io/dergeberl/kubeteach
+    pullPolicy: Always
+    # tag: "latest"
+  kubeteachWebterminal:
+    repository: ghcr.io/dergeberl/kubeteach-webterminal
+    pullPolicy: Always
+    # tag: "latest"
+
+dashboard:
+  enabled: false
+  service:
+    type: ClusterIP
+    port: 80
+  credentials:
+    username: "kubeteach"
+    # password: "password" # if not set a random string will be created if secret does not exists
+
+webterminal:
+  enabled: false
+  service:
+    type: ClusterIP
+    port: 8080
+  credentials:
+    username: "terminal"
+    # password: "password" # if not set a random string will be created if secret does not exists
+  serviceAccount:
+    annotations: {}
+    clusterAdmin: true
 
 service:
   enabled: false

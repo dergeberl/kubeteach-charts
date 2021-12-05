@@ -1,0 +1,31 @@
+{{- if .Values.webterminal.serviceAccount.clusterAdmin -}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "kubeteach.name" . }}-webterminal
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "kubeteach.name" . }}-webterminal
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "kubeteach.name" . }}-webterminal
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kubeteach.webterminalServiceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end}}

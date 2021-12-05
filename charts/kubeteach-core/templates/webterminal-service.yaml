@@ -1,0 +1,17 @@
+{{- if .Values.webterminal.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kubeteach.name" . }}-dashboard-webterminal
+  labels:
+    {{- include "kubeteach.labels" . | nindent 4 }}
+spec:
+  ports:
+  - name: webterminal
+    port:  {{ .Values.webterminal.service.port }}
+    protocol: TCP
+    targetPort: webterminal
+  selector:
+    {{- include "kubeteach.selectorLabelsWebterminal" . | nindent 4 }}
+  type: {{ .Values.webterminal.service.type }}
+{{- end}}

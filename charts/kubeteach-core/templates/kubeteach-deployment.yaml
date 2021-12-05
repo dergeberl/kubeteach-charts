@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kubeteach.name" . }}
+  labels:
+    {{- include "kubeteach.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kubeteach.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kubeteach.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "kubeteach.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          args:
+            - --leader-elect
+            {{- if .Values.dashboard.enabled }}
+            - -dashboard
+            {{- end }}
+            {{- if .Values.webterminal.enabled }}
+            - -dashboard-webterminal
+            {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.kubeteach.repository }}:{{ .Values.images.kubeteach.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.images.kubeteach.pullPolicy }}
+          env:
+          - name: WEBTERMINAL_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                key: credentials
+                name: {{ include "kubeteach.name" . }}-webterminal
+          - name: DASHBOARD_BASIC_AUTH_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: {{ include "kubeteach.name" . }}
+          - name: DASHBOARD_BASIC_AUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: {{ include "kubeteach.name" . }}
+          ports:
+            - containerPort: 8080
+              name: metrics
+            {{- if .Values.dashboard.enabled }}
+            - containerPort: 8090
+              name: dashboard
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
