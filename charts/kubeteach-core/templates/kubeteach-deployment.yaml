@@ -56,12 +56,12 @@ spec:
                 key: password
                 name: {{ include "kubeteach.name" . }}
           ports:
-            - containerPort: 8080
-              name: metrics
-            {{- if .Values.dashboard.enabled }}
+          {{- if .Values.dashboard.enabled }}
             - containerPort: 8090
               name: dashboard
-            {{- end }}
+          {{- end }}
+            - containerPort: 8080
+              name: metrics
           livenessProbe:
             httpGet:
               path: /readyz

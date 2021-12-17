@@ -1,0 +1,13 @@
+Thank you for installing {{ .Chart.Name }}. You can list your Task with:
+
+kubectl get tasks -n {{ .Release.Namespace }}
+{{ if .Values.dashboard.enabled }}
+The Dashboard is enabled. DO NOT MAKE IT AVAILABLE VIA INTERNET!
+You can use it with the following command (to forward a local port):
+
+kubectl port-forward -n kt-dev service/kubeteach-core-dashboard 8080:80
+
+Now you can access the dashboard via http://localhost:8080
+Username: {{ .Values.dashboard.credentials.username }}
+Password: {{ include "kubeteach.dashboardBasicAuthPassword" . }}
+{{- end}}
