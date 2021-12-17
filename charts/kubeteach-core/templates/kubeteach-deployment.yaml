@@ -29,11 +29,37 @@ spec:
         - name: {{ .Chart.Name }}
           args:
             - --leader-elect
+            {{- if .Values.dashboard.enabled }}
+            - -dashboard
+            {{- end }}
+            {{- if .Values.webterminal.enabled }}
+            - -dashboard-webterminal
+            {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.images.kubeteach.repository }}:{{ .Values.images.kubeteach.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.images.kubeteach.pullPolicy }}
+          env:
+          - name: WEBTERMINAL_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                key: credentials
+                name: {{ include "kubeteach.name" . }}-webterminal
+          - name: DASHBOARD_BASIC_AUTH_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: {{ include "kubeteach.name" . }}
+          - name: DASHBOARD_BASIC_AUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: {{ include "kubeteach.name" . }}
           ports:
+          {{- if .Values.dashboard.enabled }}
+            - containerPort: 8090
+              name: dashboard
+          {{- end }}
             - containerPort: 8080
               name: metrics
           livenessProbe:

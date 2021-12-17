@@ -1,0 +1,62 @@
+{{- if .Values.webterminal.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kubeteach.name" . }}-webterminal
+  labels:
+    {{- include "kubeteach.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kubeteach.selectorLabelsWebterminal" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kubeteach.selectorLabelsWebterminal" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "kubeteach.webterminalServiceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-webterminal
+          env:
+            - name: GOTTY_PATH
+              value: "/shell/"
+            - name: GOTTY_WS_ORIGIN
+              value: ".*"
+            - name: GOTTY_CREDENTIAL
+              valueFrom:
+                secretKeyRef:
+                  key: credentials
+                  name: {{ include "kubeteach.name" . }}-webterminal
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.kubeteachWebterminal.repository }}:{{ .Values.images.kubeteachWebterminal.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.images.kubeteachWebterminal.pullPolicy }}
+          ports:
+            - containerPort: 8080
+              name: webterminal
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
