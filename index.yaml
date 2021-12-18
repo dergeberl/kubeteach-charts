@@ -3,6 +3,19 @@ entries:
   kubeteach-core:
   - apiVersion: v2
     appVersion: v0.2.0-alpha
+    created: "2021-12-18T00:22:34.465351236Z"
+    description: learn kubernetes in kuberenetes
+    digest: 8f38295464f284c06b2236554b19aa337672f6dcb17f994ed4477c5254204b43
+    maintainers:
+    - name: dergeberl
+      url: https://github.com/dergeberl
+    name: kubeteach-core
+    type: application
+    urls:
+    - https://github.com/dergeberl/kubeteach-charts/releases/download/kubeteach-core-0.1.4/kubeteach-core-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: v0.2.0-alpha
     created: "2021-12-17T23:56:48.064720383Z"
     description: learn kubernetes in kuberenetes
     digest: 74c60f2efcee020ee6d07ab0e01302e564f1ef76441584a2901e57f55173437d
@@ -108,4 +121,4 @@ entries:
     urls:
     - https://github.com/dergeberl/kubeteach-charts/releases/download/kubeteach-exerciseset1-0.1.0/kubeteach-exerciseset1-0.1.0.tgz
     version: 0.1.0
-generated: "2021-12-17T23:56:48.064739683Z"
+generated: "2021-12-18T00:22:34.465377436Z"
