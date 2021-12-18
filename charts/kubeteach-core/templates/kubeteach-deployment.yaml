@@ -34,6 +34,7 @@ spec:
             {{- end }}
             {{- if .Values.webterminal.enabled }}
             - -dashboard-webterminal
+            - -dashboard-webterminal-host={{ include "kubeteach.name" . }}-dashboard-webterminal
             {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
