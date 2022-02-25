@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubeteach-exerciseset1
 description: learn kubernetes in kuberenetes
 type: application
-version: 0.2.1
+version: 0.2.2
 appVersion: "v0.2.2-alpha"
 maintainers:
   - name: dergeberl
@@ -10,5 +10,5 @@ maintainers:
 dependencies:
   - name: kubeteach-core
     repository: 'https://dergeberl.github.io/kubeteach-charts'
-    version: "0.2.1"
+    version: "0.2.2"
     alias: kubeteach
