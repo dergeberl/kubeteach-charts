@@ -3,6 +3,7 @@ helm-extra-args: --timeout 60s
 chart-dirs:
   - charts
 chart-repos:
-  - kubeteach=https://dergeberl.github.io/kubeteach-charts
+  - kubeteach=https://Duciwuci.github.io/kubeteach-charts
 excluded-charts:
   - exerciseset1
+  - exerciseset2
