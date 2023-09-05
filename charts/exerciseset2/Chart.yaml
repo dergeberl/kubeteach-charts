@@ -1,0 +1,14 @@
+apiVersion: v2
+name: kubeteach-exerciseset2
+description: learn rolling updates
+type: application
+version: 0.2.3
+appVersion: "v0.2.3-alpha"
+maintainers:
+  - name: dergeberl
+    url: https://github.com/dergeberl
+dependencies:
+  - name: kubeteach-core
+    repository: 'https://dergeberl.github.io/kubeteach-charts'
+    version: "0.2.3"
+    alias: kubeteach

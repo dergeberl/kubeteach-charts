@@ -1,0 +1,66 @@
+apiVersion: kubeteach.geberl.io/v1alpha1
+kind: ExerciseSet
+metadata:
+  name: set2
+spec:
+  taskDefinitions:
+    - name: task01
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Create the Deployment"
+          description: "Create a Deployment on the cluster in the namespace kubeteach with the name set2deployment and the image nginx:latest"
+        taskCondition:
+          - apiVersion: v1
+            kind: Deployment
+            name: "set2deployment"
+            resourceCondition:
+              - field: "metadata.namespace"
+                operator: "eq"
+                value: "kubeteach"
+              - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                operator: "eq"
+                value: "1"
+        points: 5
+  taskDefinitions:
+    - name: task02
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Rollout the Deployment"
+          description: "Rollout the Deployment set2deployment to Revision Number 2"
+        taskCondition:
+            kind: Deployment
+            name: "set2deployment"
+            resourceCondition:
+              - field: "metadata.namespace"
+                operator: "eq"
+                value: "kubeteach"
+              - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                operator: "eq"
+                value: "2"
+        points: 5
+  taskDefinitions:
+    - name: task03
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Rollback the Deployment"
+          description: "Rollback the Deployment set2deployment to Revision Number 1"
+        taskCondition:
+            kind: Deployment
+            name: "set2deployment"
+            resourceCondition:
+              - field: "metadata.namespace"
+                operator: "eq"
+                value: "kubeteach"
+              - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                operator: "eq"
+                value: "1"
+        points: 5
+status:
+  numberOfActiveTasks: 1
+  numberOfPendingTasks: 1
+  numberOfSuccessfulTasks: 0
+  numberOfTasks: 3
+  numberOfTasksWithoutPoints: 0
+  numberOfUnknownTasks: 0
+  pointsAchieved: 0
+  pointsTotal: 15
