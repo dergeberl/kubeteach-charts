@@ -8,16 +8,22 @@ spec:
       taskDefinitionSpec:
         taskSpec:
           title: "Create the Deployment"
-          description: "Create a Deployment on the cluster in the namespace kubeteach with the name set2deployment and the image nginx:latest"
+          description: "Create a Deployment on the cluster in the namespace kubeteach with the name set2deployment and the image nginx:latest and 1 Replica"
         taskCondition:
           - apiVersion: v1
             kind: Deployment
             name: "set2deployment"
             resourceCondition:
+              - field: "spec.template.spec.containers.0.image"
+                operator: "eq"
+                value: "nginx:latest"
               - field: "metadata.namespace"
                 operator: "eq"
                 value: "kubeteach"
               - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                operator: "eq"
+                value: "1"
+              - field: "spec.replicas"
                 operator: "eq"
                 value: "1"
         points: 5
@@ -31,27 +37,61 @@ spec:
             kind: Deployment
             name: "set2deployment"
             resourceCondition:
+              - field: "spec.template.spec.containers.0.image"
+                operator: "eq"
+                value: "nginx:latest"
               - field: "metadata.namespace"
                 operator: "eq"
                 value: "kubeteach"
               - field: "metadata.annotations.deployment.kubernetes.io/revision"
                 operator: "eq"
                 value: "2"
-        points: 5
+              - field: "spec.replicas"
+                operator: "eq"
+                value: "1"
   taskDefinitions:
     - name: task03
       taskDefinitionSpec:
         taskSpec:
-          title: "Rollback the Deployment"
-          description: "Rollback the Deployment set2deployment to Revision Number 1"
+          title: "Scale the Deployment"
+          description: "Scale the Deployment to 5 Replicas"
         taskCondition:
             kind: Deployment
             name: "set2deployment"
             resourceCondition:
+              - field: "spec.template.spec.containers.0.image"
+                operator: "eq"
+                value: "nginx:latest"
               - field: "metadata.namespace"
                 operator: "eq"
                 value: "kubeteach"
               - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                operator: "eq"
+                value: "2"
+              - field: "spec.replicas"
+                operator: "eq"
+                value: "5"
+        points: 5
+  taskDefinitions:
+    - name: task04
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Rollback the Deployment"
+          description: "Rollback the Deployment set2deployment to Revision Number 1 and verify the changes"
+        taskCondition:
+            kind: Deployment
+            name: "set2deployment"
+            resourceCondition:
+              - field: "spec.template.spec.containers.0.image"
+                operator: "eq"
+                value: "nginx:latest"
+              - field: "metadata.namespace"
+                operator: "eq"
+                value: "kubeteach"
+              - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                operator: "eq"
+                value: "1"
+              - field: "spec.replicas"
                 operator: "eq"
                 value: "1"
         points: 5
