@@ -5,7 +5,7 @@ on:
     branches:
       - feature/*
   pull_request:
-    branches: [ main, exerciseset2 ]
+    branches: [ main ]
 
 jobs:
   lint:
