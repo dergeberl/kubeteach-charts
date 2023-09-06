@@ -1,6 +1,6 @@
 apiVersion: v2
 name: kubeteach-exerciseset2
-description: learn rolling updates
+description: learn assigning persistent volumes in kubernetes
 type: application
 version: 0.2.3
 appVersion: "v0.2.3-alpha"

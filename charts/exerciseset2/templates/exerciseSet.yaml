@@ -1,3 +1,4 @@
+---
 apiVersion: kubeteach.geberl.io/v1alpha1
 kind: ExerciseSet
 metadata:
@@ -7,100 +8,94 @@ spec:
     - name: task01
       taskDefinitionSpec:
         taskSpec:
-          title: "Create the Deployment"
-          description: "Create a Deployment on the cluster in the namespace kubeteach with the name set2deployment and the image nginx:latest and 1 Replica"
+          title: "Create namespace"
+          description: "Create a new namespace with the name kubeteach"
+          helpURL: "https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
         taskCondition:
           - apiVersion: v1
-            kind: Deployment
-            name: "set2deployment"
+            kind: Namespace
+            name: "kubeteach"
+        points: 5
+    - name: taskxx
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Create pod"
+          description: "Create a pod in namespace kubeteach, name it pod1 and use nginx:latest as image"
+        requiredTaskName: task01
+        taskCondition:
+          - apiVersion: v1
+            kind: Pod
+            name: "pod1"
+            namespace: "kubeteach"
             resourceCondition:
-              - field: "spec.template.spec.containers.0.image"
+              - field: "spec.containers.0.image"
                 operator: "eq"
                 value: "nginx:latest"
-              - field: "metadata.namespace"
-                operator: "eq"
-                value: "kubeteach"
-              - field: "metadata.annotations.deployment.kubernetes.io/revision"
-                operator: "eq"
-                value: "1"
-              - field: "spec.replicas"
-                operator: "eq"
-                value: "1"
         points: 5
-  taskDefinitions:
     - name: task02
       taskDefinitionSpec:
         taskSpec:
-          title: "Rollout the Deployment"
-          description: "Rollout the Deployment set2deployment to Revision Number 2"
+          title: "Create a Persistent Volume Claim"
+          description: "Create a Persistent Volume Claim (PVC) in the cluster with the name myfirstpvc in the task01's namespace, request 1Gi storage with RWO access mode and manual storageClassName"
+        requiredTaskName: task01
         taskCondition:
-            kind: Deployment
-            name: "set2deployment"
+          - apiVersion: "v1"
+            kind: PersistentVolumeClaim
+            name: "myfirstpvc"
+            namespace: kubeteach
             resourceCondition:
-              - field: "spec.template.spec.containers.0.image"
+              - field: "spec.storageClassName"
                 operator: "eq"
-                value: "nginx:latest"
-              - field: "metadata.namespace"
+                value: "manual"
+              - field: "spec.resources.requests.storage"
                 operator: "eq"
-                value: "kubeteach"
-              - field: "metadata.annotations.deployment.kubernetes.io/revision"
-                operator: "eq"
-                value: "2"
-              - field: "spec.replicas"
-                operator: "eq"
-                value: "1"
-  taskDefinitions:
+                value: "1Gi"
+        points: 5
     - name: task03
       taskDefinitionSpec:
         taskSpec:
-          title: "Scale the Deployment"
-          description: "Scale the Deployment to 5 Replicas"
+          title: "Create a Persistent Volume"
+          description: "Create a Persistent Volume (PV) in the cluster with the name myfirstpv in the task01's namespace, spec 1Gi of capacity with RWO access mode and manual storageClassName. Moreover, use the hostpath.path /opt/volume/nginx and specify the claimRef for task02's PVC"
+        requiredTaskName: task02
         taskCondition:
-            kind: Deployment
-            name: "set2deployment"
+          - apiVersion: "v1"
+            kind: PersistentVolume
+            name: "myfirstpv"
             resourceCondition:
-              - field: "spec.template.spec.containers.0.image"
+              - field: "spec.storageClassName"
                 operator: "eq"
-                value: "nginx:latest"
-              - field: "metadata.namespace"
+                value: "manual"
+              - field: "spec.capacity.storage"
                 operator: "eq"
-                value: "kubeteach"
-              - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                value: "1Gi"
+              - field: "spec.claimRef.name"
                 operator: "eq"
-                value: "2"
-              - field: "spec.replicas"
+                value: "myfirstpvc"
+              - field: "status.phase"
                 operator: "eq"
-                value: "5"
-        points: 5
-  taskDefinitions:
+                value: "Bound"
     - name: task04
       taskDefinitionSpec:
         taskSpec:
-          title: "Rollback the Deployment"
-          description: "Rollback the Deployment set2deployment to Revision Number 1 and verify the changes"
+          title: "Create a Pod"
+          description: "Create a Pod pod1 with the nginx:latest image, assign the pod the volume and specify the PVC"
+        requiredTaskName: task03
         taskCondition:
-            kind: Deployment
-            name: "set2deployment"
+          - apiVersion: "v1"
+            kind: Pod
+            name: "pod1"
+            namespace: kubeteach
             resourceCondition:
               - field: "spec.template.spec.containers.0.image"
                 operator: "eq"
                 value: "nginx:latest"
-              - field: "metadata.namespace"
+              - field: "volumes.0.name"
                 operator: "eq"
-                value: "kubeteach"
-              - field: "metadata.annotations.deployment.kubernetes.io/revision"
+                value: "myfirstpv"
+              - field: "volumes.0.persistentVolumeClaim.claimName"
                 operator: "eq"
-                value: "1"
-              - field: "spec.replicas"
+                value: "myfirstpvc"
+              - field: "status.phase"
                 operator: "eq"
-                value: "1"
+                value: "running"
         points: 5
-status:
-  numberOfActiveTasks: 1
-  numberOfPendingTasks: 1
-  numberOfSuccessfulTasks: 0
-  numberOfTasks: 3
-  numberOfTasksWithoutPoints: 0
-  numberOfUnknownTasks: 0
-  pointsAchieved: 0
-  pointsTotal: 15
