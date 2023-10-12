@@ -36,7 +36,7 @@ spec:
       taskDefinitionSpec:
         taskSpec:
           title: "Create a Persistent Volume"
-          description: "Create a Persistent Volume (PV) in the cluster with the name myfirstpv in the task01's namespace, spec 1Gi of capacity with RWO access mode. Moreover, use the hostpath.path /opt/volume/nginx and specify the claimRef for task02's PVC"
+          description: "Create a Persistent Volume (PV) in the cluster with the name myfirstpv, spec 1Gi of capacity andRWO access mode. Moreover, use the hostpath.path /opt/volume/nginx and specify the claimRef for task02's PVC"
         requiredTaskName: task02
         taskCondition:
           - apiVersion: v1
