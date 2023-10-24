@@ -1,0 +1,38 @@
+# kubeteach helm settings can be done under kubeteach, for possible values see kubeteach-core helm chart
+kubeteach:
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/dergeberl/kubeteach
+    pullPolicy: Always
+    # tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+
+  serviceAccount:
+    name: kubeteach-sa
+    annotations: {}
+
+  podAnnotations: {}
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

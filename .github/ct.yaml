@@ -6,3 +6,4 @@ chart-repos:
   - kubeteach=https://dergeberl.github.io/kubeteach-charts
 excluded-charts:
   - exerciseset1
+  - exerciseset2
