@@ -92,7 +92,7 @@ spec:
       taskDefinitionSpec:
         taskSpec:
           title: "Create service for deployment"
-          description: "Create a service of type NodePort to export port 80 of the deployment from task3"
+          description: "Create a service with the name kubeteach-webserver in the kubeteach namespace of type NodePort to export port 80 of the deployment from task3"
           helpURL: "https://kubernetes.io/docs/concepts/services-networking/service/"
         requiredTaskName: task03
         taskCondition:
