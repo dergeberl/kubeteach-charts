@@ -1,0 +1,100 @@
+---
+apiVersion: kubeteach.geberl.io/v1alpha1
+kind: ExerciseSet
+metadata:
+  name: set2
+spec:
+  taskDefinitions:
+    - name: task01
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Create namespace"
+          description: "Create a new namespace with the name kubeteach"
+          helpURL: "https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
+        taskCondition:
+          - apiVersion: v1
+            kind: Namespace
+            name: "kubeteach"
+        points: 5
+    - name: task02
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Create a Persistent Volume Claim"
+          description: "Create a Persistent Volume Claim (PVC) in the cluster with the name myfirstpvc in the task01's namespace, request 1Gi storage with RWO access mode"
+        requiredTaskName: task01
+        taskCondition:
+          - apiVersion: v1
+            kind: PersistentVolumeClaim
+            name: "myfirstpvc"
+            namespace: kubeteach
+            resourceCondition:
+              - field: "spec.resources.requests.storage"
+                operator: "eq"
+                value: "1Gi"
+              - field: "spec.accessModes.0"
+                operator: "eq"
+                value: "ReadWriteOnce"
+        points: 5
+    - name: task03
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Create a Persistent Volume"
+          description: "Create a Persistent Volume (PV) in the cluster with the name myfirstpv, spec 1Gi of capacity and RWO access mode. Moreover, use the hostpath.path /opt/volume/nginx and specify the claimRef for task02's PVC"
+        requiredTaskName: task02
+        taskCondition:
+          - apiVersion: v1
+            kind: PersistentVolume
+            name: "myfirstpv"
+            resourceCondition:
+              - field: "spec.capacity.storage"
+                operator: "eq"
+                value: "1Gi"
+              - field: "spec.claimRef.name"
+                operator: "eq"
+                value: "myfirstpvc"
+              - field: "status.phase"
+                operator: "eq"
+                value: "Bound"
+    - name: task04
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Create a Pod"
+          description: "Create a Pod pod1 with the nginx:latest image, assign the pod the volume and specify the PVC"
+        requiredTaskName: task03
+        taskCondition:
+          - apiVersion: v1
+            kind: Pod
+            name: "pod1"
+            namespace: kubeteach
+            resourceCondition:
+              - field: "spec.containers.0.image"
+                operator: "eq"
+                value: "nginx:latest"
+              - field: "spec.volumes.0.name"
+                operator: "eq"
+                value: "myfirstpv"
+              - field: "spec.volumes.0.persistentVolumeClaim.claimName"
+                operator: "eq"
+                value: "myfirstpvc"
+              - field: "status.phase"
+                operator: "eq"
+                value: "Running"
+              - field: "spec.containers.0.volumeMounts.0.mountPath"
+                operator: "notnil"
+        points: 5
+    - name: task05
+      taskDefinitionSpec:
+        taskSpec:
+          title: "Troubleshoot the PVC"
+          description: "Why the PVC in the namespace kubeteach-pv-troubleshoot can't bind the PV? Fix it"
+        requiredTaskName: task04
+        taskCondition:
+          - apiVersion: v1
+            kind: PersistentVolumeClaim
+            name: "pvc-claim-a-lot"
+            namespace: kubeteach-pv-troubleshoot
+            resourceCondition:
+              - field: "status.phase"
+                operator: "eq"
+                value: "Bound"
+        points: 5
